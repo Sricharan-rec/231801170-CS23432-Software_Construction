@@ -1,0 +1,35 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<section class="container mx-auto max-w-4xl py-12 px-4 animate-fadeIn">
+    <div class="bg-sky-900/20 rounded-xl shadow-lg p-8 backdrop-blur-md border border-sky-800/50">
+        <h2 class="text-3xl font-bold text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-sky-300 to-cyan-400">
+            Global Leaderboard
+        </h2>
+        <div class="flex justify-between items-center mb-4 px-4 py-3 bg-sky-900/30 rounded-lg">
+            <span class="w-12 text-center font-semibold">Rank</span>
+            <span class="flex-1 font-semibold ml-4">Player</span>
+            <span class="w-32 text-right font-semibold">Total Score</span>
+        </div>
+        
+        <div class="space-y-3">
+            {% for entry in leaderboard %}
+            <div class="flex items-center px-4 py-3 bg-sky-900/10 hover:bg-sky-900/20 rounded-lg transition-all group">
+                <div class="w-12 text-center text-gray-300">#{{ forloop.counter }}</div>
+                <div class="flex-1 flex items-center ml-4">
+                    <div class="w-8 h-8 rounded-full bg-sky-500 flex items-center justify-center mr-3">
+                        <span class="text-white font-medium">{{ entry.user.username|first|upper }}</span>
+                    </div>
+                    <span class="font-medium">{{ entry.user.username }}</span>
+                </div>
+                <div class="w-32 text-right font-bold text-sky-400">{{ entry.total_score }}</div>
+            </div>
+            {% empty %}
+            <div class="text-center py-4 text-gray-300">No leaderboard data available</div>
+            {% endfor %}
+        </div>
+        
+        </div>
+    </div>
+</section>
+{% endblock %}

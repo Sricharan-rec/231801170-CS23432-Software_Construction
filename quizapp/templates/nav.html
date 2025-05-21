@@ -1,0 +1,32 @@
+<!-- Desktop Navbar -->
+<nav class="hidden md:block p-4 bg-black/80 backdrop-blur-md shadow-lg sticky top-0 z-50 border-b border-sky-800">
+  <div class="container mx-auto flex justify-between items-center">
+    <a href="{% url 'dashboard' %}" class="text-2xl font-bold text-sky-400 hover:text-sky-300 transition-all animate-float">QuizMaster</a>
+    <div class="space-x-4">
+      <a href="{% url 'dashboard' %}" class="hover:text-sky-400 transition-all">Home</a>
+      <a href="{% url 'quiz' 1 %}" class="hover:text-sky-400 transition-all">Quizzes</a> 
+      <a href="{% url 'leaderboard' %}" class="hover:text-sky-400 transition-all">Leaderboard</a>
+      <a href="{% url 'logout' %}" class="bg-sky-600 px-4 py-2 rounded-lg hover:bg-sky-700 transition-all">Logout</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Navbar -->
+<nav class="md:hidden p-4 bg-black/80 backdrop-blur-md shadow-lg sticky top-0 z-50 border-b border-sky-800">
+  <div class="container mx-auto flex justify-between items-center">
+    <a href="{% url 'dashboard' %}" class="text-2xl font-bold text-sky-400 hover:text-sky-300 transition-all animate-float">QuizMaster</a>
+    <button id="menu-btn" class="text-sky-400 focus:outline-none">☰</button>
+  </div>
+  <div id="mobile-menu" class="hidden flex flex-col items-center bg-black/90 backdrop-blur-md mt-4 space-y-4 py-4 border-t border-sky-800">
+    <a href="{% url 'dashboard' %}" class="hover:text-sky-400 transition-all">Home</a>
+    <a href="{% url 'quiz' 1 %}" class="hover:text-sky-400 transition-all">Quizzes</a>
+    <a href="{% url 'leaderboard' %}" class="hover:text-sky-400 transition-all">Leaderboard</a>
+    <a href="{% url 'logout' %}" class="bg-sky-600 px-4 py-2 rounded-lg hover:bg-sky-700 transition-all">Logout</a>
+  </div>
+</nav>
+
+<script>
+  document.getElementById('menu-btn').addEventListener('click', function() {
+    document.getElementById('mobile-menu').classList.toggle('hidden');
+  });
+</script>

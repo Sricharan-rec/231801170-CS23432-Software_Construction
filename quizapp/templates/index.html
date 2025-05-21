@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuizMaster - Online Quiz System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black min-h-screen text-sky-300 font-sans flex flex-col">
+  {% include 'nav.html' %}
+
+  <main class="flex-1">
+    {% block content %}
+    {% endblock %}
+  </main>
+
+  <footer class="bg-black/80 backdrop-blur-md py-6 border-t border-sky-800">
+    <div class="container mx-auto text-center">
+      <p class="text-sky-400/80">&copy; 2023 QuizMaster. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+
+    </html>

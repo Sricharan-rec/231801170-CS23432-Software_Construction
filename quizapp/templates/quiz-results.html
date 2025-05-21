@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        .score {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        .leaderboard {
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Quiz Results</h1>
+    <p class="score">Your Score: <strong>{{ score }}</strong></p>
+
+    <div class="leaderboard">
+        <h2>Leaderboard</h2>
+        <table>
+            <tr>
+                <th>Rank</th>
+                <th>Username</th>
+                <th>Highest Score</th>
+            </tr>
+            {% for entry in leaderboard %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ entry.user.username }}</td>
+                <td>{{ entry.highest_score }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No leaderboard data available.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <a href="{% url 'quiz_home' %}">Back to Quiz Home</a>
+</div>
+
+</body>
+</html>

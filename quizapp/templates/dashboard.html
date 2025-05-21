@@ -1,0 +1,80 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<style>
+    /* Custom animations */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .animate-float { animation: float 3s ease-in-out infinite; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn { animation: fadeIn 0.8s ease-out; }
+
+    /* Custom 3D card flip */
+    .flip-card {
+      perspective: 1000px;
+    }
+    .flip-card-inner {
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+    .flip-card:hover .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+    .flip-card-front, .flip-card-back {
+      backface-visibility: hidden;
+    }
+    .flip-card-back {
+      transform: rotateY(180deg);
+    }
+</style>
+
+<!-- Hero Section -->
+<section class="container mx-auto text-center py-20 animate-fadeIn px-4">
+    <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-sky-300 to-cyan-400">
+      Welcome to QuizMaster
+    </h1>
+    <p class="text-lg sm:text-xl mb-8 text-sky-400/80">
+      Test your knowledge with our interactive quizzes!
+    </p>
+    <a href="{% url 'signin' %}" class="bg-sky-600 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-lg text-lg font-semibold hover:bg-sky-700 hover:scale-105 transition-all transform">
+      Get Started
+    </a>
+</section>
+
+<!-- Dynamic Quiz Cards Section -->
+<section class="container mx-auto py-12 px-4">
+    <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-sky-300 to-cyan-400">
+      Featured Quizzes
+    </h2>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {% for quiz in quizzes %}
+        <div class="flip-card group">
+            <div class="flip-card-inner bg-sky-900/20 rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300 border border-sky-800/50">
+                <!-- Front of Card -->
+                <div class="flip-card-front flex flex-col items-center justify-center text-center p-4 h-full">
+                    <h3 class="text-xl sm:text-2xl font-bold mb-4 text-sky-300">{{ quiz.topic }}</h3>
+                    <p class="text-sky-400/80 text-sm sm:text-base">{{ quiz.description }}</p>
+                </div>
+                <!-- Back of Card -->
+                <div class="flip-card-back absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center p-6 space-y-4">
+                    <h3 class="text-xl sm:text-2xl font-bold text-sky-300">Details</h3>
+                    <p class="text-sky-400/80 text-lg">10 Questions</p>
+                    <a href="{% url 'quiz' quiz.quiz_id %}" class="bg-sky-600 text-white px-4 py-2 rounded-lg text-sm sm:text-base font-semibold hover:bg-sky-700 hover:scale-105 transition-all transform">
+                        Start Quiz
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-sky-400/80 text-center col-span-full">No quizzes available yet.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="container mx-auto max-w-2xl py-8 animate-fadeIn">
+  <h1 class="text-4xl font-bold text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-sky-300 to-cyan-400">
+    {{ quiz.title }}
+  </h1>
+
+  <form id="quiz-form" method="post" action="{% url 'submit_quiz' quiz.topic.pk %}">
+    {% csrf_token %}
+    <!-- Hidden field to store the current question id (for display only) -->
+    <input type="hidden" id="question-id" name="question_id" value="{{ questions.0.id }}">
+
+    <!-- Question Display -->
+    <div id="question-container">
+      <div class="bg-sky-900/20 p-6 rounded-xl shadow-lg backdrop-blur-md border border-sky-800/50 hover:shadow-xl transition-all duration-300">
+        <p class="text-lg font-bold text-sky-300 mb-4" id="question-text">{{ questions.0.question_text }}</p>
+
+        <div class="space-y-3" id="options-container">
+          {% for option in questions.0.options %}
+          <label class="flex items-center space-x-3 cursor-pointer text-sky-300 hover:text-sky-200 transition-all">
+            <input type="radio" name="answer_{{ questions.0.id }}" value="{{ option }}"
+                   class="form-radio h-5 w-5 text-sky-500 border-2 border-sky-500 bg-sky-900/30 focus:ring-sky-500">
+            <span>{{ option }}</span>
+          </label>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="flex justify-between mt-6">
+      <button type="button" id="prev-btn" class="hidden bg-gray-600 py-2 px-6 rounded-lg text-white font-semibold hover:bg-gray-700 transition-all">
+        Previous
+      </button>
+      <button type="button" id="next-btn" class="bg-sky-600 py-2 px-6 rounded-lg text-white font-semibold hover:bg-sky-700 transition-all">
+        Next
+      </button>
+      <button type="submit" id="submit-btn" class="hidden bg-green-600 py-2 px-6 rounded-lg text-white font-semibold hover:bg-green-700 transition-all">
+        Submit
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+  // 'questions' is passed as a JSON-safe variable from the backend.
+  let questions = {{ questions|safe }};
+  let currentQuestion = 0;
+  let answers = {}; // Store selected answers keyed by question index
+
+  function updateQuestion() {
+    // Update the question text and the hidden question-id field
+    document.getElementById('question-text').innerText = questions[currentQuestion].question_text;
+    document.getElementById('question-id').value = questions[currentQuestion].id;
+
+    // Clear previous options
+    let optionsContainer = document.getElementById('options-container');
+    optionsContainer.innerHTML = '';
+
+    // Render options for the current question
+    questions[currentQuestion].options.forEach(option => {
+      let label = document.createElement('label');
+      label.className = "flex items-center space-x-3 cursor-pointer text-sky-300 hover:text-sky-200 transition-all";
+      label.innerHTML = `
+        <input type="radio" name="answer_${questions[currentQuestion].id}" value="${option}" class="form-radio h-5 w-5 text-sky-500 border-2 border-sky-500 bg-sky-900/30 focus:ring-sky-500" ${answers[currentQuestion] === option ? 'checked' : ''}>
+        <span>${option}</span>
+      `;
+      // Save answer when an option is selected
+      label.querySelector("input").addEventListener("change", function() {
+        answers[currentQuestion] = this.value;
+      });
+      optionsContainer.appendChild(label);
+    });
+
+    // Toggle visibility of navigation and submit buttons
+    document.getElementById('prev-btn').classList.toggle('hidden', currentQuestion === 0);
+    document.getElementById('next-btn').classList.toggle('hidden', currentQuestion === questions.length - 1);
+    document.getElementById('submit-btn').classList.toggle('hidden', currentQuestion !== questions.length - 1);
+  }
+
+  // Navigation button event handlers
+  document.getElementById('next-btn').addEventListener('click', () => {
+    if (currentQuestion < questions.length - 1) {
+      currentQuestion++;
+      updateQuestion();
+    }
+  });
+
+  document.getElementById('prev-btn').addEventListener('click', () => {
+    if (currentQuestion > 0) {
+      currentQuestion--;
+      updateQuestion();
+    }
+  });
+
+  // Before submitting the form, append hidden inputs for all answers
+  document.getElementById("quiz-form").addEventListener("submit", function() {
+    for (let i = 0; i < questions.length; i++) {
+      if (answers[i]) {
+        let input = document.createElement("input");
+        input.type = "hidden";
+        input.name = `answer_${questions[i].id}`;
+        input.value = answers[i];
+        this.appendChild(input);
+      }
+    }
+  });
+
+  updateQuestion();
+</script>
+{% endblock %}

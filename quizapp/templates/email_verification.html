@@ -1,0 +1,14 @@
+{% autoescape off %}
+Hello {{ user.username }},
+
+Thank you for signing up at {{ domain }}.  
+
+To complete your registration and activate your account, please click the link below:  
+
+[Activate Your Account]({{ activation_url }})  
+
+If you did not create an account, you can safely ignore this email.  
+
+Thank you!  
+The {{ domain }} Team  
+{% endautoescape %}

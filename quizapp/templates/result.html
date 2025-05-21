@@ -1,0 +1,25 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<section class="container mx-auto text-center py-20 animate-fadeIn px-4">
+    <h1 class="text-4xl sm:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-sky-300 to-cyan-400">
+        Quiz Results: {{ topic }}
+    </h1>
+    <p class="text-lg sm:text-xl mb-6 text-sky-400/80">
+        You have completed the quiz! Here’s your performance summary:
+    </p>
+
+    <div class="bg-sky-900/20 p-6 rounded-lg shadow-lg w-full max-w-lg mx-auto border border-sky-800/50">
+        <p class="text-xl text-white font-semibold mb-2">Your Score: <span class="text-sky-300">{{ score }}/{{ total_questions }}</span></p>
+        <p class="text-lg text-white mb-2">Total Score: <span class="text-sky-300">{{ total_score }}</span></p>
+        <p class="text-lg text-white mb-4">Highest Score: <span class="text-sky-300">{{ highest_score }}</span></p>
+    </div>
+
+    <div class="mt-8 flex justify-center space-x-4">
+      
+        <a href="{% url 'dashboard' %}" class="bg-gray-700 text-white px-6 py-2 rounded-lg text-lg font-semibold hover:bg-gray-800 hover:scale-105 transition-all transform">
+            Return Home
+        </a>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends 'index.html' %}
+
+{% block content %}
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn { animation: fadeIn 0.8s ease-out; }
+    .profile-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .profile-pic-wrapper {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .edit-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      color: white;
+      font-size: 24px;
+      display: none;
+    }
+    .profile-pic-wrapper:hover .edit-icon {
+      display: flex;
+    }
+  </style>
+</head>
+<body class="bg-black min-h-screen text-sky-300 font-sans">
+
+
+
+  <!-- Profile Section -->
+  <section class="container mx-auto max-w-4xl py-12 px-4 animate-fadeIn flex flex-col items-center">
+    <div class="bg-sky-900/20 rounded-xl shadow-lg p-8 backdrop-blur-md border border-sky-800/50 text-center w-full max-w-md">
+      <h2 class="text-3xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-sky-300 to-cyan-400">
+        User Profile
+      </h2>
+
+      <!-- Uploaded Profile Picture -->
+      <div class="profile-container">
+        <div class="profile-pic-wrapper w-32 h-32 rounded-full overflow-hidden border-4 border-sky-400">
+          <img id="profilePic" src="default-profile.png" alt="Profile Picture" class="w-full h-full object-cover">
+          <span class="edit-icon" onclick="document.getElementById('uploadPic').click();">
+            +
+          </span>
+        </div>
+        
+        <!-- Upload New Profile Picture -->
+        <input type="file" id="uploadPic" accept="image/*" class="hidden" onchange="previewImage(event)">
+      </div>
+
+      <!-- User Information Display -->
+      <div class="w-full mt-6 space-y-4">
+        <div>
+          <label class="block text-sky-300 mb-1">Username:</label>
+          <p id="usernameLabel" class="text-lg font-bold text-white">{{user}}</p>
+        </div>
+        <div>
+          <label class="block text-sky-300 mb-1">Email:</label>
+          <p id="emailLabel" class="text-lg font-bold text-white">{{email}}</p>
+        </div>
+      </div>
+
+      <!-- Save Button -->
+      <button id="saveBtn" onclick="saveProfile()" class="hidden mt-6 px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-all">
+        Save Profile
+      </button>
+
+    </div>
+  </section>
+
+  <script>
+    function previewImage(event) {
+      const reader = new FileReader();
+      reader.onload = function() {
+        document.getElementById('profilePic').src = reader.result;
+        document.getElementById('saveBtn').classList.remove('hidden');
+      }
+      reader.readAsDataURL(event.target.files[0]);
+    }
+
+    function saveProfile() {
+      const profilePic = document.getElementById('profilePic').src;
+      localStorage.setItem('profilePic', profilePic);
+      alert('Profile Saved Successfully!');
+      document.getElementById('saveBtn').classList.add('hidden');
+    }
+
+    // Load saved data
+    window.onload = function() {
+      const savedPic = localStorage.getItem('profilePic');
+      if (savedPic) document.getElementById('profilePic').src = savedPic;
+    }
+  </script>
+
+
+{% endblock content %}
